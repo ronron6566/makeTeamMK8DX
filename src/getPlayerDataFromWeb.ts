@@ -1,12 +1,8 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import { PlayerData } from './main';
 
-type NameAndMmr = {
-  name: string;
-  mmr: string;
-}
-
-export const getMmr = async (id: string): Promise<NameAndMmr> => {
+export const getMmr = async (id: string): Promise<PlayerData> => {
   const url = getUrl(id);
 
   try {
@@ -21,16 +17,14 @@ export const getMmr = async (id: string): Promise<NameAndMmr> => {
       
       dtElements.each((index, element) => {
         const text = $(element).text().trim();
-        name = $('h1').text().trim();
+        const nameAndRank = $('h1').text().trim();
+        name = nameAndRank.split(' - ')[0];
         if (text === 'MMR') {
           const nextDD = $(element).next('dd');
           mmr = nextDD.text().trim();
           return false; // ループ終了
         }
       });
-
-      console.log(`抽出された文字列:${name}`);
-      console.log(`取得したMMR: ${mmr}`);
 
       return { name, mmr };
     } else {
