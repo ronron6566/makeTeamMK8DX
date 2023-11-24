@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 // import axios from 'axios';
 // import cheerio from 'cheerio';
 import { outputLog } from './log';
-import { getMmr } from './getPlayerDataFromWeb';
+import { getPlayerDataFromWeb } from './getPlayerDataFromWeb';
 
 const playerIds: string[] = ['22459','28459','29796','31627','31883','33309','36912','42088','42092','42226'];
 
@@ -83,7 +83,7 @@ const getMmrs = async (ids: string[]): Promise<Table> => {
 //   console.log(outputTable);
 
   for (const id of ids) {
-    const playerData = await getMmr(id);
+    const playerData = await getPlayerDataFromWeb(id);
     console.log(playerData);
     // mmrs.set(playerData.name, playerData.mmr);
     table.addRow([playerData.name, playerData.mmr]);

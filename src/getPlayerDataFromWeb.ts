@@ -2,7 +2,7 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 import { PlayerData } from './main';
 
-export const getMmr = async (id: string): Promise<PlayerData> => {
+export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
   const url = getUrl(id);
 
   try {
