@@ -9,7 +9,7 @@ export const createEmbedMmrList = async (playerIds:string[]) :Promise<EmbedBuild
     const table = await addMmrListToTable(mmrList);
     const embed = new EmbedBuilder().setFields(table.toField());
     embed.setColor('Random')
-    embed.setTimestamp()
+    embed.setTimestamp();
 
     return embed;
 }
@@ -20,6 +20,9 @@ const addMmrListToTable = async (mmrList:PlayerData[]) :Promise<Table>=> {
     for (const playerData of sortedMmrList) {
         table.addRow([playerData.name, playerData.mmr]);
     }
+    const averageMmr = getAverageMmr(sortedMmrList);
+    table.addRow(['--------------', '----']);
+    table.addRow(['averageMMR', averageMmr.toFixed(2)]);
     return table;
 }
 
@@ -31,4 +34,12 @@ const sortMmrList = (mmrList:PlayerData[]) :PlayerData[]=> {
             return 1;
         }
     });
+}
+
+const getAverageMmr = (mmrList:PlayerData[]) :number=> {
+    let total = 0;
+    for (const playerData of mmrList) {
+        total += Number(playerData.mmr);
+    }
+    return total / mmrList.length;
 }
