@@ -1,6 +1,6 @@
 import { Table } from "embed-table";
 
-export type PlayerData = {
+export interface PlayerData {
     name: string;
     mmr: string;
   }
