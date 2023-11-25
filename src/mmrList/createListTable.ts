@@ -16,8 +16,19 @@ export const createEmbedMmrList = async (playerIds:string[]) :Promise<EmbedBuild
 
 const addMmrListToTable = async (mmrList:PlayerData[]) :Promise<Table>=> {
     const table = mmrListtable
-    for (const playerData of mmrList) {
+    const sortedMmrList = sortMmrList(mmrList);
+    for (const playerData of sortedMmrList) {
         table.addRow([playerData.name, playerData.mmr]);
     }
     return table;
+}
+
+const sortMmrList = (mmrList:PlayerData[]) :PlayerData[]=> {
+    return mmrList.sort((a, b) => {
+        if (Number(a.mmr) > Number(b.mmr)) {
+            return -1;
+        } else {
+            return 1;
+        }
+    });
 }
