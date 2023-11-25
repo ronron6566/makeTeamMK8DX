@@ -70,10 +70,12 @@ client.on('messageCreate', async (message: Message) => {
   if (message.author.bot) return
   if (message.content === '!mmrlist' || message.content === '!ml') {
     await mmlListHandler(message);
-  }
-  if (message.content.startsWith('!maketeam') || message.content.startsWith('!mt')) {
+  }else if (message.content.startsWith('!ml') || message.content.startsWith('!mt')) {
     await makeTeamHandler(message);
   }
+  // if (message.content.startsWith('!maketeam') || message.content.startsWith('!mt')) {
+  //   await makeTeamHandler(message);
+  // }
 })
 
 
