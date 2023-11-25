@@ -21,21 +21,22 @@ const client = new Client({
 
 //Botがきちんと起動したか確認
 client.once('ready', () => {
-    console.log('Ready!')
-    if(client.user){
-        console.log(client.user.tag)
-    }
+
+  console.log('Ready!')
+  if(client.user){
+    console.log(client.user.tag)
+  }
 
 
 })
 
 client.on('messageCreate', async (message: Message) => {
 
-    if (message.author.bot) return
-    if (message.content === '!mmrlist' || message.content === '!ml') {
-        const embedMmrList = await createEmbedMmrList(playerIds);  
-        message.channel.send({ embeds: [embedMmrList] });
-    }
+  if (message.author.bot) return
+  if (message.content === '!mmrlist' || message.content === '!ml') {
+    const embedMmrList = await createEmbedMmrList(playerIds);  
+    message.channel.send({ embeds: [embedMmrList] });
+  }
 })
 
 
