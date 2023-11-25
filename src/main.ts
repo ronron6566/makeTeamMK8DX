@@ -4,7 +4,6 @@ import { Table } from 'embed-table';
 import dotenv from 'dotenv'
 // import axios from 'axios';
 // import cheerio from 'cheerio';
-import { outputLog } from './log';
 import { getPlayerDataFromWeb } from './getPlayerDataFromWeb';
 
 const playerIds: string[] = ['22459','28459','29796','31627','31883','33309','36912','42088','42092','42226'];
@@ -25,11 +24,6 @@ const client = new Client({
   partials: [Partials.Message, Partials.Channel],
 })
 
-// const prefix = '!'; // コマンドのプレフィックス
-
-// メモリ内にTODOリストを保持するためのMap
-// const todoList = new Map();
-
 //Botがきちんと起動したか確認
 client.once('ready', () => {
     console.log('Ready!')
@@ -40,24 +34,12 @@ client.once('ready', () => {
 
 })
 
-
-//!timeと入力すると現在時刻を返信するように
 client.on('messageCreate', async (message: Message) => {
 
-    console.log(outputLog('test'));
     if (message.author.bot) return
-    if (message.content === '!time') {
-        const date1 = new Date();
-        message.channel.send(date1.toLocaleString());
-    }else if (message.content === '!mmrlist' || message.content === '!ml') {
-
-        const table = await getMmrs(playerIds);
-
-          const embed = new EmbedBuilder().setFields(table.toField());
-          embed.setColor('Random')
-          embed.setTimestamp()
-          message.channel.send({ embeds: [embed] });
-
+    if (message.content === '!mmrlist' || message.content === '!ml') {
+        const embedMmrList = await createEmbedMmrList(playerIds);  
+        message.channel.send({ embeds: [embedMmrList] });
     }
 })
 
@@ -65,6 +47,17 @@ client.on('messageCreate', async (message: Message) => {
 //ボット作成時のトークンでDiscordと接続
 client.login(process.env.TOKEN)
 
+const createEmbedMmrList = async (playerIds:string[]) :Promise<EmbedBuilder>=> {
+
+    const table = await getMmrs(playerIds);
+
+    const embed = new EmbedBuilder().setFields(table.toField());
+    embed.setColor('Random')
+    embed.setTimestamp()
+
+    return embed;
+
+}
 
 const getMmrs = async (ids: string[]): Promise<Table> => {
 //   const mmrs = new Map<string, string>();
@@ -77,10 +70,6 @@ const getMmrs = async (ids: string[]): Promise<Table> => {
     end: '`',
     padEnd: 2
   });
-
-
-
-//   console.log(outputTable);
 
   for (const id of ids) {
     const playerData = await getPlayerDataFromWeb(id);
