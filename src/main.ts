@@ -2,8 +2,9 @@
 import { GatewayIntentBits, Client, Partials, Message, } from 'discord.js'
 import dotenv from 'dotenv'
 import { createEmbedMmrList } from './mmrList/createListTable';
+import { playerIds } from './env';
 
-const playerIds: string[] = ['22459','28459','29796','31627','31883','33309','36912','42088','42092','42226'];
+// const playerIds: string[] = ['22459','28459','29796','31627','31883','33309','36912','42088','42092','42226'];
 
 
 //.envファイルを読み込む
