@@ -1,7 +1,7 @@
 import { Table } from "embed-table";
 import { getPlayerDataFromWeb } from "./getPlayerDataFromWeb";
 
-export const getMmrs = async (ids: string[]): Promise<Table> => {
+export const getPlayerData = async (ids: string[]): Promise<Table> => {
     //   const mmrs = new Map<string, string>();
     
       const table = new Table({
