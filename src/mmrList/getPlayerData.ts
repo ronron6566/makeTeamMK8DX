@@ -1,18 +1,11 @@
 import { Table } from "embed-table";
 import { getPlayerDataFromWeb } from "./getPlayerDataFromWeb";
+import { mmrListtable } from "./model";
 
 export const getPlayerData = async (ids: string[]): Promise<Table> => {
     //   const mmrs = new Map<string, string>();
     
-      const table = new Table({
-        titles: ['名前', 'MMR'],
-        titleIndexes: [0, 22],
-        columnIndexes: [0, 14],
-        start: '`',
-        end: '`',
-        padEnd: 2
-      });
-    
+      const table = mmrListtable
       for (const id of ids) {
         const playerData = await getPlayerDataFromWeb(id);
         console.log(playerData);
