@@ -18,11 +18,11 @@ const addMmrListToTable = async (mmrList:PlayerData[]) :Promise<Table>=> {
     const table = mmrListtable
     const sortedMmrList = sortMmrList(mmrList);
     for (const playerData of sortedMmrList) {
-        table.addRow([playerData.name, playerData.mmr]);
+        table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed]);
     }
     const averageMmr = getAverageMmr(sortedMmrList);
-    table.addRow(['--------------', '----']);
-    table.addRow(['averageMMR', averageMmr.toFixed(2)]);
+    table.addRow(['--------------', '--------', '-----']);
+    table.addRow(['averageMMR', averageMmr.toFixed(2),'     '],{override: 2});
     return table;
 }
 
