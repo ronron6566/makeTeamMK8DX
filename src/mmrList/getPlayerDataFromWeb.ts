@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { PlayerData } from './main';
+import { PlayerData } from './model';
 
 export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
   const url = getUrl(id);
