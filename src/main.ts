@@ -1,6 +1,7 @@
 //必要なパッケージをインポートする
 import { GatewayIntentBits, Client, Partials, Message, } from 'discord.js'
 import dotenv from 'dotenv'
+import { mmlListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
 import { playerIds } from './env';
 
@@ -27,15 +28,38 @@ client.once('ready', () => {
     console.log(client.user.tag)
   }
 
+  if(client.application){
+    
+    const data = [{
+      name: "ml",
+      description: "MMLリストを表示します",
+    }];
+    client.application.commands.set(data);
+  }
+
 
 })
 
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) {
+      return;
+  }
+  if (interaction.commandName === 'ml') {
+      // await mmlListHandler(interaction);
+      await interaction.deferReply();
+      await interaction.editReply('MMLリストを表示します');
+      const embedMmrList = await createEmbedMmrList(playerIds);
+      await interaction.channel?.send({ embeds: [embedMmrList] });
+  }
+});
+
 client.on('messageCreate', async (message: Message) => {
+
+  console.log(message.content)
 
   if (message.author.bot) return
   if (message.content === '!mmrlist' || message.content === '!ml') {
-    const embedMmrList = await createEmbedMmrList(playerIds);  
-    message.channel.send({ embeds: [embedMmrList] });
+    await mmlListHandler(message);
   }
 })
 
