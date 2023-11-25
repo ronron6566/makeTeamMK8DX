@@ -1,7 +1,7 @@
 //必要なパッケージをインポートする
 import { GatewayIntentBits, Client, Partials, Message, } from 'discord.js'
 import dotenv from 'dotenv'
-import { mmlListHandler } from './mmrList';
+import { makeTeamHandler, mmlListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
 import { playerIds } from './env';
 
@@ -30,11 +30,21 @@ client.once('ready', () => {
 
   if(client.application){
     
-    const data = [{
+    const mlCommand = [{
       name: "ml",
       description: "MMLリストを表示します",
+    },
+    {
+      name: "ml2",
+      description: "MMLリストを表示します",
     }];
-    client.application.commands.set(data);
+    client.application.commands.set(mlCommand);
+
+    // const mlCommand2 = [{
+    //   name: "ml2",
+    //   description: "MMLリストを表示します",
+    // }];
+    // client.application.commands.set(mlCommand2);
   }
 
 
@@ -60,6 +70,9 @@ client.on('messageCreate', async (message: Message) => {
   if (message.author.bot) return
   if (message.content === '!mmrlist' || message.content === '!ml') {
     await mmlListHandler(message);
+  }
+  if (message.content.startsWith('!maketeam') || message.content.startsWith('!mt')) {
+    await makeTeamHandler(message);
   }
 })
 
