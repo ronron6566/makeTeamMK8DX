@@ -35,44 +35,6 @@ client.once('ready', () => {
       name: "ml",
       description: "MMLリストを表示します。1~6人まで指定可能。全体を見たい場合は指定なし",
       options: mlCommandParams
-      // options: [
-      //   {
-      //     name: 'member1',
-      //     description: '一人目のメンバーをメンションしてください',
-      //     type: 6,
-      //     required: false,
-      //   },
-      //   {
-      //     name: 'member2',
-      //     description: '二人目のメンバーをメンションしてください',
-      //     type: 6,
-      //     required: false,
-      //   },
-      //   {
-      //     name: 'member3',
-      //     description: '三人目のメンバーをメンションしてください',
-      //     type: 6,
-      //     required: false,
-      //   },
-      //   {
-      //     name: 'member4',
-      //     description: '四人目のメンバーをメンションしてください',
-      //     type: 6,
-      //     required: false,
-      //   },
-      //   {
-      //     name: 'member5',
-      //     description: '五人目のメンバーをメンションしてください',
-      //     type: 6,
-      //     required: false,
-      //   },  
-      //   {
-      //     name: 'member6',
-      //     description: '六人目のメンバーをメンションしてください',
-      //     type: 6,
-      //     required: false,
-      //   }
-      // ],
     },
     // {
     //   name: "ml2",
