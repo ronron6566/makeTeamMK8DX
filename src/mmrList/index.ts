@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { createEmbedMmrList } from "./createListTable";
-import { discordToPlayerMap, playerIds } from "../env";
+import { discordToPlayerMap, playerIds } from "../../env/env";
 
 export const mmlListHandler = async (message: Message) => {
     const embedMmrList = await createEmbedMmrList(playerIds);  

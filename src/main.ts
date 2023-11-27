@@ -1,9 +1,9 @@
 //必要なパッケージをインポートする
-import { GatewayIntentBits, Client, Partials, Message, } from 'discord.js'
+import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable, } from 'discord.js'
 import dotenv from 'dotenv'
 import { makeTeamHandler, mmlListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
-import { playerIds } from './env';
+import { discordToPlayerMap, playerIds } from '../env/env';
 
 //.envファイルを読み込む
 dotenv.config()
@@ -30,14 +30,53 @@ client.once('ready', () => {
 
   if(client.application){
     
-    const mlCommand = [{
+    const mlCommand: ApplicationCommandDataResolvable[] = [{
       name: "ml",
-      description: "MMLリストを表示します",
+      description: "MMLリストを表示します。1~6人まで指定可能。全体を見たい場合は指定なし",
+      options: [
+        {
+          name: 'member1',
+          description: '一人目のメンバーをメンションしてください',
+          type: 6,
+          required: false,
+        },
+        {
+          name: 'member2',
+          description: '二人目のメンバーをメンションしてください',
+          type: 6,
+          required: false,
+        },
+        {
+          name: 'member3',
+          description: '三人目のメンバーをメンションしてください',
+          type: 6,
+          required: false,
+        },
+        {
+          name: 'member4',
+          description: '四人目のメンバーをメンションしてください',
+          type: 6,
+          required: false,
+        },
+        {
+          name: 'member5',
+          description: '五人目のメンバーをメンションしてください',
+          type: 6,
+          required: false,
+        },  
+        {
+          name: 'member6',
+          description: '六人目のメンバーをメンションしてください',
+          type: 6,
+          required: false,
+        }
+      ],
     },
-    {
-      name: "ml2",
-      description: "MMLリストを表示します",
-    }];
+    // {
+    //   name: "ml2",
+    //   description: "MMLリストを表示します",
+    // }
+  ];
     client.application.commands.set(mlCommand);
 
     // const mlCommand2 = [{
@@ -54,12 +93,36 @@ client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) {
       return;
   }
+  await interaction.deferReply();
+  await interaction.editReply('MMLリストを表示します');
+
   if (interaction.commandName === 'ml') {
       // await mmlListHandler(interaction);
-      await interaction.deferReply();
-      await interaction.editReply('MMLリストを表示します');
-      const embedMmrList = await createEmbedMmrList(playerIds);
-      await interaction.channel?.send({ embeds: [embedMmrList] });
+
+      if(interaction.options.data.length > 0){
+        const targetDiscordIds: string[] = [];
+        console.log('optionsあり')
+        interaction.options.data.forEach(option => {
+          console.log(option.value)
+          if (typeof option.value === 'string') {
+            targetDiscordIds.push(option.value);
+          }
+        })
+        
+
+        // interaction.options.data.forEach(option => {
+        //   const value = option.value;
+        //   if (typeof value === 'string') {
+        //     targetDiscordIds.push(value);
+        //   }
+        // });
+        const targetPlayerIds = targetDiscordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
+        const embedMmrList = await createEmbedMmrList(targetPlayerIds);
+        await interaction.channel?.send({ embeds: [embedMmrList] });
+      }else{
+        const embedMmrList = await createEmbedMmrList(playerIds);
+        await interaction.channel?.send({ embeds: [embedMmrList] });
+      }
   }
 });
 
