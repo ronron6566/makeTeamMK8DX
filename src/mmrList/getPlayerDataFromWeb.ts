@@ -18,7 +18,6 @@ export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
       
     dtElements.each((index, element) => {
       const text = $(element).text().trim();
-      console.log(text);
       const nameAndRank = $('h1').text().trim();
       name = nameAndRank.split(' - ')[0];
 
