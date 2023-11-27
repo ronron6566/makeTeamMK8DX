@@ -1,9 +1,10 @@
 //必要なパッケージをインポートする
-import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable, } from 'discord.js'
+import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable } from 'discord.js'
 import dotenv from 'dotenv'
 import { makeTeamHandler, mmlListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
 import { discordToPlayerMap, playerIds } from '../env/env';
+import { mlCommandParams } from './mmrList/model';
 
 //.envファイルを読み込む
 dotenv.config()
@@ -33,44 +34,45 @@ client.once('ready', () => {
     const mlCommand: ApplicationCommandDataResolvable[] = [{
       name: "ml",
       description: "MMLリストを表示します。1~6人まで指定可能。全体を見たい場合は指定なし",
-      options: [
-        {
-          name: 'member1',
-          description: '一人目のメンバーをメンションしてください',
-          type: 6,
-          required: false,
-        },
-        {
-          name: 'member2',
-          description: '二人目のメンバーをメンションしてください',
-          type: 6,
-          required: false,
-        },
-        {
-          name: 'member3',
-          description: '三人目のメンバーをメンションしてください',
-          type: 6,
-          required: false,
-        },
-        {
-          name: 'member4',
-          description: '四人目のメンバーをメンションしてください',
-          type: 6,
-          required: false,
-        },
-        {
-          name: 'member5',
-          description: '五人目のメンバーをメンションしてください',
-          type: 6,
-          required: false,
-        },  
-        {
-          name: 'member6',
-          description: '六人目のメンバーをメンションしてください',
-          type: 6,
-          required: false,
-        }
-      ],
+      options: mlCommandParams
+      // options: [
+      //   {
+      //     name: 'member1',
+      //     description: '一人目のメンバーをメンションしてください',
+      //     type: 6,
+      //     required: false,
+      //   },
+      //   {
+      //     name: 'member2',
+      //     description: '二人目のメンバーをメンションしてください',
+      //     type: 6,
+      //     required: false,
+      //   },
+      //   {
+      //     name: 'member3',
+      //     description: '三人目のメンバーをメンションしてください',
+      //     type: 6,
+      //     required: false,
+      //   },
+      //   {
+      //     name: 'member4',
+      //     description: '四人目のメンバーをメンションしてください',
+      //     type: 6,
+      //     required: false,
+      //   },
+      //   {
+      //     name: 'member5',
+      //     description: '五人目のメンバーをメンションしてください',
+      //     type: 6,
+      //     required: false,
+      //   },  
+      //   {
+      //     name: 'member6',
+      //     description: '六人目のメンバーをメンションしてください',
+      //     type: 6,
+      //     required: false,
+      //   }
+      // ],
     },
     // {
     //   name: "ml2",
@@ -128,4 +130,3 @@ client.on('messageCreate', async (message: Message) => {
 
 //ボット作成時のトークンでDiscordと接続
 client.login(process.env.TOKEN)
-

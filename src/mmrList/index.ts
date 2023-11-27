@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import { createEmbedMmrList } from "./createListTable";
-import { discordToPlayerMap, playerIds } from "../../env/env";
+import { playerIds } from "../../env/env";
+import { getPlayerIdsByDiscordIds } from "./model";
 
 export const mmlListHandler = async (message: Message) => {
     const embedMmrList = await createEmbedMmrList(playerIds);  
@@ -9,9 +10,7 @@ export const mmlListHandler = async (message: Message) => {
 
 export const makeTeamHandler = async (message: Message) => {
     const targetDiscordIds = (message.content.match(/<@(.*?)>/g) || []).map(match => match.slice(2, -1));
-    const targetPlayerIds = targetDiscordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
-    console.log(targetPlayerIds);
-
+    const targetPlayerIds = getPlayerIdsByDiscordIds(targetDiscordIds)
     if (targetPlayerIds.length > 0) {
         const embedMmrList = await createEmbedMmrList(targetPlayerIds);  
         message.channel.send({ embeds: [embedMmrList] });

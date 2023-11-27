@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { getMmrList } from "./getMmrList";
+import { getAverageMmr, getMmrList } from "./getMmrList";
 import { PlayerData, mmrListtable } from "./model";
 import { Table } from "embed-table";
 
@@ -34,12 +34,4 @@ const sortMmrList = (mmrList:PlayerData[]) :PlayerData[]=> {
             return 1;
         }
     });
-}
-
-const getAverageMmr = (mmrList:PlayerData[]) :number=> {
-    let total = 0;
-    for (const playerData of mmrList) {
-        total += Number(playerData.mmr);
-    }
-    return total / mmrList.length;
 }
