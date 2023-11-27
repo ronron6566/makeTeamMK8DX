@@ -78,12 +78,6 @@ client.once('ready', () => {
     // }
   ];
     client.application.commands.set(mlCommand);
-
-    // const mlCommand2 = [{
-    //   name: "ml2",
-    //   description: "MMLリストを表示します",
-    // }];
-    // client.application.commands.set(mlCommand2);
   }
 
 
@@ -97,29 +91,21 @@ client.on("interactionCreate", async (interaction) => {
   await interaction.editReply('MMLリストを表示します');
 
   if (interaction.commandName === 'ml') {
-      // await mmlListHandler(interaction);
 
+      // 引数がある場合は引数のユーザーのMMLリストを表示
       if(interaction.options.data.length > 0){
         const targetDiscordIds: string[] = [];
-        console.log('optionsあり')
         interaction.options.data.forEach(option => {
-          console.log(option.value)
           if (typeof option.value === 'string') {
             targetDiscordIds.push(option.value);
           }
         })
         
-
-        // interaction.options.data.forEach(option => {
-        //   const value = option.value;
-        //   if (typeof value === 'string') {
-        //     targetDiscordIds.push(value);
-        //   }
-        // });
         const targetPlayerIds = targetDiscordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
         const embedMmrList = await createEmbedMmrList(targetPlayerIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }else{
+        // 引数がない場合は全体のMMLリストを表示
         const embedMmrList = await createEmbedMmrList(playerIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }
@@ -131,16 +117,14 @@ client.on('messageCreate', async (message: Message) => {
   console.log(message.content)
 
   if (message.author.bot) return
+  // !ml のみの場合は全体のMMLリストを表示
   if (message.content === '!mmrlist' || message.content === '!ml') {
     await mmlListHandler(message);
+  // !ml @user1 @user2... の場合は指定したユーザーのMMLリストを表示
   }else if (message.content.startsWith('!ml') || message.content.startsWith('!mt')) {
     await makeTeamHandler(message);
   }
-  // if (message.content.startsWith('!maketeam') || message.content.startsWith('!mt')) {
-  //   await makeTeamHandler(message);
-  // }
 })
-
 
 //ボット作成時のトークンでDiscordと接続
 client.login(process.env.TOKEN)

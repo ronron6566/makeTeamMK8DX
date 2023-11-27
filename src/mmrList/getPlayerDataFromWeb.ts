@@ -14,10 +14,7 @@ export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
     const dtElements = $('dt');
     let name = 'NAMEが見つかりませんでした';
     let mmr = 'MMRが見つかりませんでした';
-    let lastPlayed = 'LAST PLAYEDが見つかりませんでした';
-
-    // data-time属性が含まれる要素を選択し、その属性の値を取得
-    
+    let lastPlayed = 'LAST PLAYEDが見つかりませんでした';  
       
     dtElements.each((index, element) => {
       const text = $(element).text().trim();
@@ -35,8 +32,6 @@ export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
       if(dataTime) {
         const dateObject = new Date(dataTime);
         lastPlayed = dateObject.toLocaleDateString('ja-JP', { month: '2-digit', day: '2-digit' });
-        // lastPlayed = dataTime.split('T')[0]; // 'T'を区切り文字として日付部分を取得
-        // return false; // ループ終了
       }
     });
 
