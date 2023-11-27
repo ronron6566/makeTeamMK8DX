@@ -37,7 +37,7 @@ export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
       }
     });
 
-    return { name, mmr, lastPlayed };
+    return { name, mmr, lastPlayed, url };
     } else {
       console.log('ウェブページにアクセスできませんでした');
       throw new Error('ウェブページにアクセスできませんでした');

@@ -55,6 +55,7 @@ client.on("interactionCreate", async (interaction) => {
   await interaction.editReply('MMLリストを表示します');
 
   if (interaction.commandName === 'ml') {
+    console.log('interaction:ml')
 
       // 引数がある場合は引数のユーザーのMMLリストを表示
       if(interaction.options.data.length > 0){
@@ -78,7 +79,7 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on('messageCreate', async (message: Message) => {
 
-  console.log(message.content)
+  console.log('message',message.content)
 
   if (message.author.bot) return
   // !ml のみの場合は全体のMMLリストを表示

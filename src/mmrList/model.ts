@@ -5,6 +5,7 @@ export interface PlayerData {
     name: string;
     mmr: string;
     lastPlayed: string;
+    url: string;
   }
 
 export const mmrListtable = new Table({

@@ -17,8 +17,9 @@ export const createEmbedMmrList = async (playerIds:string[]) :Promise<EmbedBuild
 const addMmrListToTable = async (mmrList:PlayerData[]) :Promise<Table>=> {
     const table = mmrListtable
     const sortedMmrList = sortMmrList(mmrList);
+    console.log(sortedMmrList);
     for (const playerData of sortedMmrList) {
-        table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed]);
+        table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed],{url: playerData.url, override: 2  });
     }
     const averageMmr = getAverageMmr(sortedMmrList);
     table.addRow(['--------------', '--------', '-----']);
