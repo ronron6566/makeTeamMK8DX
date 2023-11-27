@@ -12,9 +12,9 @@ export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
     const html = response.data;
     const $ = cheerio.load(html);
     const dtElements = $('dt');
-    let name = 'NAMEが見つかりませんでした';
-    let mmr = 'MMRが見つかりませんでした';
-    let lastPlayed = 'LAST PLAYEDが見つかりませんでした';  
+    let name = '----';
+    let mmr = '----';
+    let lastPlayed = '--/--';  
       
     dtElements.each((index, element) => {
       const text = $(element).text().trim();
@@ -25,6 +25,9 @@ export const getPlayerDataFromWeb = async (id: string): Promise<PlayerData> => {
       if (text === 'MMR') {
         const nextDD = $(element).next('dd');
         mmr = nextDD.text().trim();
+        if(mmr === 'Placement'){
+          mmr = '----';
+        }
         return false; // ループ終了
       }
       const dataTime = $('span.utc-to-local').attr('data-time');
