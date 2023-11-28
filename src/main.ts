@@ -1,7 +1,7 @@
 //必要なパッケージをインポートする
 import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable } from 'discord.js'
 import dotenv from 'dotenv'
-import { makeTeamHandler, mmlListHandler } from './mmrList';
+import { makeTeamHandler, mmrListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
 import { discordToPlayerMap, playerIds } from '../env/env';
 import { mlCommandParams } from './mmrList/model';
@@ -33,12 +33,12 @@ client.once('ready', () => {
     
     const mlCommand: ApplicationCommandDataResolvable[] = [{
       name: "ml",
-      description: "MMLリストを表示します。1~6人まで指定可能。全体を見たい場合は指定なし",
+      description: "MMRリストを表示します。1~6人まで指定可能。全体を見たい場合は指定なし",
       options: mlCommandParams
     },
     // {
     //   name: "ml2",
-    //   description: "MMLリストを表示します",
+    //   description: "MMRリストを表示します",
     // }
   ];
     client.application.commands.set(mlCommand);
@@ -52,12 +52,12 @@ client.on("interactionCreate", async (interaction) => {
       return;
   }
   await interaction.deferReply();
-  await interaction.editReply('MMLリストを表示します');
+  await interaction.editReply('MMRリストを表示します');
 
   if (interaction.commandName === 'ml') {
     console.log('interaction:ml')
 
-      // 引数がある場合は引数のユーザーのMMLリストを表示
+      // 引数がある場合は引数のユーザーのMMRリストを表示
       if(interaction.options.data.length > 0){
         const targetDiscordIds: string[] = [];
         interaction.options.data.forEach(option => {
@@ -70,7 +70,7 @@ client.on("interactionCreate", async (interaction) => {
         const embedMmrList = await createEmbedMmrList(targetPlayerIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }else{
-        // 引数がない場合は全体のMMLリストを表示
+        // 引数がない場合は全体のMMRリストを表示
         const embedMmrList = await createEmbedMmrList(playerIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }
@@ -82,10 +82,10 @@ client.on('messageCreate', async (message: Message) => {
   console.log('message',message.content)
 
   if (message.author.bot) return
-  // !ml のみの場合は全体のMMLリストを表示
+  // !ml のみの場合は全体のMMRリストを表示
   if (message.content === '!mmrlist' || message.content === '!ml') {
-    await mmlListHandler(message);
-  // !ml @user1 @user2... の場合は指定したユーザーのMMLリストを表示
+    await mmrListHandler(message);
+  // !ml @user1 @user2... の場合は指定したユーザーのMMRリストを表示
   }else if (message.content.startsWith('!ml') || message.content.startsWith('!mt')) {
     await makeTeamHandler(message);
   }

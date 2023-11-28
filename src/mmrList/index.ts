@@ -3,7 +3,7 @@ import { createEmbedMmrList } from "./createListTable";
 import { playerIds } from "../../env/env";
 import { getPlayerIdsByDiscordIds } from "./model";
 
-export const mmlListHandler = async (message: Message) => {
+export const mmrListHandler = async (message: Message) => {
     const embedMmrList = await createEmbedMmrList(playerIds);  
     message.channel.send({ embeds: [embedMmrList] });
 }
