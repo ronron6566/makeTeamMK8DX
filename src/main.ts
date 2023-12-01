@@ -52,10 +52,11 @@ client.on("interactionCreate", async (interaction) => {
       return;
   }
   await interaction.deferReply();
-  await interaction.editReply('MMRリストを表示します');
+  
 
   if (interaction.commandName === 'ml') {
     console.log('interaction:ml')
+    await interaction.editReply('ちょっとまっとけ');
 
       // 引数がある場合は引数のユーザーのMMRリストを表示
       if(interaction.options.data.length > 0){
@@ -74,6 +75,8 @@ client.on("interactionCreate", async (interaction) => {
         const embedMmrList = await createEmbedMmrList(playerIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }
+
+    await interaction.editReply('MMRリストを表示しました');
   }
 });
 
