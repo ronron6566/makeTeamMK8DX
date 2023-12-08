@@ -3,8 +3,11 @@ import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataRes
 import dotenv from 'dotenv'
 import { makeTeamHandler, mmrListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
-import { discordToPlayerMap, playerIds } from '../env/env';
-import { mlCommandParams } from './mmrList/model';
+import { discordToPlayerMap, loungeIds } from '../env/env';
+import { addCommandParams, mlCommandParams } from './mmrList/model';
+import { addInitialPlayerData, addPlayerData, deleteAllData } from './dao/accessFirestore';
+import { pleaseWait } from './util/botReplies';
+// import { add } from 'cheerio/lib/api/traversing';
 
 //.envファイルを読み込む
 dotenv.config()
@@ -27,6 +30,7 @@ client.once('ready', () => {
   console.log('Ready!')
   if(client.user){
     console.log(client.user.tag)
+    // addInitialPlayerData();
   }
 
   if(client.application){
@@ -37,9 +41,15 @@ client.once('ready', () => {
       options: mlCommandParams
     },
     // {
-    //   name: "ml2",
-    //   description: "MMRリストを表示します",
-    // }
+    //   name: "add",
+    //   description: "MMRリストにプレイヤーを追加します",
+    //   options: addCommandParams
+    // },
+    {
+      name: "add",
+      description: "MMRリストにプレイヤーを追加します",
+      options: addCommandParams
+    }
   ];
     client.application.commands.set(mlCommand);
   }
@@ -52,11 +62,12 @@ client.on("interactionCreate", async (interaction) => {
       return;
   }
   await interaction.deferReply();
+  console.log('interaction',interaction.guildId)
   
 
   if (interaction.commandName === 'ml') {
     console.log('interaction:ml')
-    await interaction.editReply('ちょっとまっとけ');
+    await interaction.editReply(pleaseWait);
 
       // 引数がある場合は引数のユーザーのMMRリストを表示
       if(interaction.options.data.length > 0){
@@ -67,22 +78,28 @@ client.on("interactionCreate", async (interaction) => {
           }
         })
         
-        const targetPlayerIds = targetDiscordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
-        const embedMmrList = await createEmbedMmrList(targetPlayerIds);
+        const targetLoungeIds = targetDiscordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
+        const embedMmrList = await createEmbedMmrList(targetLoungeIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }else{
         // 引数がない場合は全体のMMRリストを表示
-        const embedMmrList = await createEmbedMmrList(playerIds);
+        const embedMmrList = await createEmbedMmrList(loungeIds);
         await interaction.channel?.send({ embeds: [embedMmrList] });
       }
 
     await interaction.editReply('MMRリストを表示しました');
+  }else if (interaction.commandName === 'add') {
+    console.log('interaction:add')
+    await interaction.editReply(pleaseWait);
+    // const 
+    // addPlayerData(interaction.guildId || '', interaction.user.id, interaction.options.data[0].value as string);
   }
+
 });
 
 client.on('messageCreate', async (message: Message) => {
 
-  console.log('message',message.content)
+  console.log('message',message.guildId)
 
   if (message.author.bot) return
   // !ml のみの場合は全体のMMRリストを表示
@@ -91,6 +108,10 @@ client.on('messageCreate', async (message: Message) => {
   // !ml @user1 @user2... の場合は指定したユーザーのMMRリストを表示
   }else if (message.content.startsWith('!ml') || message.content.startsWith('!mt')) {
     await makeTeamHandler(message);
+  }else if (message.content === '!initdb') {
+    await addInitialPlayerData(message.guildId || '');
+  }else if (message.content === '!dldata') {
+    await deleteAllData();
   }
 })
 

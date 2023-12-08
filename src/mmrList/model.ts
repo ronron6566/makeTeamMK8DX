@@ -6,6 +6,7 @@ export interface PlayerData {
     mmr: string;
     lastPlayed: string;
     url: string;
+    sabori: boolean;    
   }
 
 export const mmrListtable = new Table({
@@ -17,7 +18,7 @@ export const mmrListtable = new Table({
     padEnd: 2,
   });
 
-export const getPlayerIdsByDiscordIds = (discordIds: string[]) => 
+export const getLoungeIdsByDiscordIds = (discordIds: string[]) => 
   discordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
 
 export const mlCommandParams = [
@@ -57,4 +58,20 @@ export const mlCommandParams = [
     type: 6,
     required: false,
   }
+];
+
+export const addCommandParams = [
+  { 
+    name: 'lounge_id',
+    description: 'LoungeのIDを入力してください',
+    type: 3,
+    required: true,
+  },
+  {
+    name: 'discord_id',
+    description: 'DiscordのIDを入力してください',
+    type: 6,
+    required: false,
+  }
+
 ];
