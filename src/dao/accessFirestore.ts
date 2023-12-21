@@ -3,30 +3,9 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, getDocs, deleteDoc } from 'firebase/firestore';
 import { discordToPlayerMap } from '../../env/env';
 
-// import { getDatabase } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-// interface FireBaseConfig {
-//     apiKey: string;
-//     authDomain: string;
-//     projectId: string;
-//     storageBucket: string;
-//     messagingSenderId: string;
-//     appId: string;
-//     measurementId: string;
-// }
-
 const apiKey = process.env.FIREBASE_API_KEY;
 const appId = process.env.FIREBASE_APP_ID;
 const measurementId = process.env.FIREBASE_MEASUREMENT_ID;
-
-// if (typeof apiKey !== 'string' || typeof appId !== 'string' || typeof measurementId !== 'string') {
-//     throw new Error('Firebase configuration values are invalid or not provided as strings.');
-// }
 
 const PlayerDataCollection= {
     apiKey,
@@ -44,7 +23,6 @@ const db = getFirestore(app);
 
 const collectionPlayerData = collection(db, 'PlayerData')
 
-// データを追加する例
 export async function addPlayerData(guildId: string, discordId: string, loungeId: string) {
     const docRef = await addDoc(collectionPlayerData, {
       discordId,
@@ -63,7 +41,6 @@ export async function addInitialPlayerData(guildId: string) {
       }
     
 }
-  
   
   // データを取得する例
 export async function getData() {
@@ -86,10 +63,3 @@ export async function deleteAllData() {
       console.error('削除中にエラーが発生しました:', error);
     }
   }
-  
-  
-//   // データを追加
-//   addData();
-  
-//   // データを取得
-//   getData();
