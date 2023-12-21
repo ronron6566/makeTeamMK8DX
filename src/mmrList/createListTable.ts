@@ -9,7 +9,19 @@ export const createEmbedMmrList = async (loungeIds:string[]) :Promise<EmbedBuild
     const table = await addMmrListToTable(mmrList);
     const embed = new EmbedBuilder().setFields(table.toField());
     embed.setColor('Random')
-    embed.setTimestamp();
+
+    // const date = new Date();
+    // const month = String(date.getMonth() + 1).padStart(2, '0');
+    // const day = String(date.getDate()).padStart(2, '0');
+    // const hours = String(date.getHours()).padStart(2, '0');
+    // const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    // const formattedDate = `${month}/${day} ${hours}:${minutes}`;
+    
+    embed.setFooter({ text: getTimeStamp()})
+
+    // embed.setTimestamp();
+
 
     return embed;
 }
@@ -19,10 +31,11 @@ const addMmrListToTable = async (mmrList:PlayerData[]) :Promise<Table>=> {
     const sortedMmrList = sortMmrList(mmrList);
     console.log(sortedMmrList);
     for (const playerData of sortedMmrList) {
-        table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed],{url: playerData.url, override: 2  });
+        table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed,playerData.eventPlayed],{url: playerData.url, override: 2  });
     }
     const averageMmr = getAverageMmr(sortedMmrList);
-    table.addRow(['--------------', '--------', '-----']);
+    // table.addRow(['--------------', '--------', '-----', '-']);
+    table.addRow(['--------------', '--------', '-------', '--']);
     table.addRow(['averageMMR', averageMmr.toFixed(2),'     '],{override: 2});
     return table;
 }
@@ -35,4 +48,14 @@ const sortMmrList = (mmrList:PlayerData[]) :PlayerData[]=> {
             return 1;
         }
     });
+}
+
+const getTimeStamp = () => {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${month}/${day} ${hours}:${minutes}`;
 }

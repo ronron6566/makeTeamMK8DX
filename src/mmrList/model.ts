@@ -6,13 +6,14 @@ export interface PlayerData {
     mmr: string;
     lastPlayed: string;
     url: string;
+    eventPlayed: string;
     sabori: boolean;    
   }
 
 export const mmrListtable = new Table({
-    titles: ['Name', 'MMR', 'LastPlayed'],
-    titleIndexes: [0, 20, 30],
-    columnIndexes: [0, 14 , 22],
+    titles: ['Name', 'MMR', 'Last', 'Event'],
+    titleIndexes: [0, 20, 30, 39],
+    columnIndexes: [0, 14, 22, 29],
     start: '`',
     end: '`',
     padEnd: 2,
