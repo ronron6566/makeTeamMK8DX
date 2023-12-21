@@ -1,5 +1,5 @@
 //必要なパッケージをインポートする
-import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable } from 'discord.js'
+import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable,} from 'discord.js'
 import dotenv from 'dotenv'
 import { makeTeamHandler, mmrListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
@@ -7,6 +7,7 @@ import { discordToPlayerMap, loungeIds } from '../env/env';
 import { addCommandParams, mlCommandParams } from './mmrList/model';
 import { addInitialPlayerData, addPlayerData, deleteAllData } from './dao/accessFirestore';
 import { pleaseWait } from './util/botReplies';
+import { getExecutor } from './interaction/getExecutor';
 // import { add } from 'cheerio/lib/api/traversing';
 
 //.envファイルを読み込む
@@ -91,8 +92,15 @@ client.on("interactionCreate", async (interaction) => {
   }else if (interaction.commandName === 'add') {
     console.log('interaction:add')
     await interaction.editReply(pleaseWait);
-    // const 
-    // addPlayerData(interaction.guildId || '', interaction.user.id, interaction.options.data[0].value as string);
+    const executor = getExecutor(client, interaction);
+
+    const guildId = executor.discordGuild.id;
+    const discordId = executor.discordUser.id;
+    const discordName = executor.discordName;
+    const loungeId = executor.loungeId;
+
+    addPlayerData(guildId, discordId, loungeId);
+    await interaction.editReply(discordName + 'をMMRリストに追加しました');
   }
 
 });
