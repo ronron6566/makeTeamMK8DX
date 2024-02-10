@@ -10,6 +10,11 @@ export interface PlayerData {
     sabori: boolean;    
   }
 
+export interface UrlData {
+    name: string;
+    url: string;
+  }
+
 export const mmrListtable = new Table({
     titles: ['Name', 'MMR', 'Last', 'Event'],
     titleIndexes: [0, 20, 30, 39],
