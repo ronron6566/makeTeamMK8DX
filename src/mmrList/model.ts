@@ -10,10 +10,6 @@ export interface PlayerData {
     sabori: boolean;    
   }
 
-export interface UrlData {
-    name: string;
-    url: string;
-  }
 
 export const mmrListtable = new Table({
     titles: ['Name', 'MMR', 'Last', 'Event'],
@@ -23,6 +19,7 @@ export const mmrListtable = new Table({
     end: '`',
     padEnd: 2,
   });
+
 
 export const getLoungeIdsByDiscordIds = (discordIds: string[]) => 
   discordIds.map(key => discordToPlayerMap.get(key)).filter((id): id is string => typeof id === 'string');
