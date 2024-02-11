@@ -1,10 +1,11 @@
 //必要なパッケージをインポートする
-import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable, ButtonBuilder, ButtonStyle, ActionRowBuilder} from 'discord.js'
+import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable, ButtonBuilder, ButtonStyle, ActionRowBuilder, 
+} from 'discord.js'
 import dotenv from 'dotenv'
 import { makeTeamHandler, mmrListHandler } from './mmrList';
 import { createEmbedMmrList } from './mmrList/createListTable';
 import { discordToPlayerMap, loungeIds } from '../env/env';
-import { addCommandParams, mlCommandParams } from './mmrList/model';
+import { addCommandParams,  mlCommandParams,  } from './mmrList/model';
 import { addInitialPlayerData, addPlayerData, deleteAllData } from './dao/accessFirestore';
 import { pleaseWait } from './util/botReplies';
 import { getExecutor } from './interaction/getExecutor';
@@ -12,6 +13,7 @@ import cron from 'node-cron';
 import dayjs from 'dayjs';
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import { can, drop, think } from './recruitment/model';
 // import { add } from 'cheerio/lib/api/traversing';
 
 dayjs.extend(timezone);
@@ -108,6 +110,16 @@ client.on("interactionCreate", async (interaction) => {
   try{
 
   if (!interaction.isCommand()) {
+    if (interaction.isButton()) {
+      if (interaction.customId === 'can') {
+        await interaction.update({ content: '参加しました', components: [] });
+      } else if (interaction.customId === 'think') {
+        await interaction.update({ content: '微妙ですね', components: [] });
+      } else if (interaction.customId === 'drop') {
+        await interaction.update({ content: '辞退しました', components: [] });
+      }
+    }
+
       return;
   }
   await interaction.deferReply();
@@ -198,21 +210,22 @@ client.on("interactionCreate", async (interaction) => {
   //     }
   //   } catch (error) {
   //     console.error('Error fetching messages:', error);
-    }
-  // }else if(interaction.commandName === 'bt'){
-  //   console.log('interaction:bt')
-  //   const confirm = new ButtonBuilder({
-  //     custom_id: 'send',
-  //     style: ButtonStyle.Primary,
-  //     label: 'ロール申請',
-  //     emoji: '🎮',
+    // }
+  }else if(interaction.commandName === 'bt'){
+    console.log('interaction:bt')
 
 
-  // });
-  // const register = new ActionRowBuilder()
-  //           .addComponents(confirm);
-  //   await interaction.editReply({embeds: [embed], components:[register],ephemeral: true});   );
-  // }
+
+    await interaction.editReply({
+      content: `ボタンを押してください`,
+      components: [new ActionRowBuilder<ButtonBuilder>({
+          components: [
+            can, think, drop
+          ]
+      })]
+   });
+
+  }
 
 }catch(error){
     console.log(error);
@@ -237,25 +250,6 @@ client.on('messageCreate', async (message: Message) => {
   }else if (message.content === '!dldata') {
     await deleteAllData();
   }else if (message.content === '!ul') {
-    // const  links = [];
-    // // Mapをループしてユーザー名とURLを取得
-    // for (const [userId, playerNumber] of discordToPlayerMap) {
-    //     try {
-    //         // Discordのユーザーを取得
-    //         // サーバーからメンバー情報を取得
-    //         const member = await message.guild.members.fetch(userId);
-    //         // メンバーのニックネームを取得
-    //         const nickname = member.displayName;
-    //         // リンクを作成して配列に追加
-    //         const user = await client.users.fetch(userId);
-    //         // リンクを作成して配列に追加
-    //         links.push(`[${user.username}](https://www.mk8dx-lounge.com/PlayerDetails/${playerNumber})`);
-    //     } catch (error) {
-    //         console.error(`Failed to fetch user ${userId}:`, error);
-    //     }
-    // }
-    // // リンクをメッセージとして送信
-    // message.channel.send(links.join('\n'));
   }
 
 
