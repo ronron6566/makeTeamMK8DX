@@ -242,7 +242,7 @@ client.on("interactionCreate", async (interaction) => {
     console.log('interaction:bt')
 
     await interaction.editReply({
-      content: `ボタンを押してください`,
+      content: `#2084 2v2: 02月12日 23時`,
       components: [new ActionRowBuilder<ButtonBuilder>({
           components: [
             recruitment
