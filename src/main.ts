@@ -16,6 +16,7 @@ import utc from "dayjs/plugin/utc";
 import { recruitment } from './recruitment/model';
 import { handleRecruitmentInteraction } from './recruitment';
 import { sendTodaySQInfo } from './todaySqInfo';
+import { updateMmrList } from './mmrList/updateMmrList';
 // import { add } from 'cheerio/lib/api/traversing';
 
 dayjs.extend(timezone);
@@ -48,13 +49,7 @@ client.once('ready', () => {
 
   cron.schedule('0 * * * *', async () => {
     // 毎時間実行
-    console.log('MMRLIST毎時更新')
-    const channel = client.channels.cache.get(process.env.CHANNEL_MMRLIST || '');
-    if (!!channel && channel.isTextBased()) {
-      const message = await channel.messages.fetch(process.env.MESSAGE_MMRLIST || '');
-      const embedMmrList = await createEmbedMmrList(loungeIds);
-      message.edit({ embeds: [embedMmrList] });
-    } 
+    updateMmrList(client);
   });
 
   console.log('Ready!')
