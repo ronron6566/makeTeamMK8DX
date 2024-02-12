@@ -13,9 +13,9 @@ import cron from 'node-cron';
 import dayjs from 'dayjs';
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import {  recruitment,} from './recruitment/model';
-import { getTodayLines, convertTodayLinesToJst } from './mogiEvents/getTodayLines';
+import { recruitment } from './recruitment/model';
 import { handleRecruitmentInteraction } from './recruitment';
+import { sendTodaySQInfo } from './todaySqInfo';
 // import { add } from 'cheerio/lib/api/traversing';
 
 dayjs.extend(timezone);
@@ -42,24 +42,12 @@ client.once('ready', () => {
   try {
 
   cron.schedule('0 0 0 * * *', async () => {
-    // ここで特定の処理を実行
-    console.log('今日のSQ投稿')
-    const todayLines = await getTodayLines(process.env.CHANNEL_SQ_INFO || '');
-    if(!todayLines) return;
-    const combinedMessage = (await convertTodayLinesToJst(todayLines)).join('\n');
-
-    let textSqNotice = '今日のSQ情報です！\nぜひみなさん！積極的に！参加しましょう！\n';
-
-    textSqNotice += combinedMessage; 
-
-    const channel = client.channels.cache.get(process.env.CHANNEL_SQ_BOSHU || '');
-    if (!!channel && channel.isTextBased()) {
-      channel.send(textSqNotice);
-    } 
+    // 毎日0時に実行
+    sendTodaySQInfo(client);
   });
 
   cron.schedule('0 * * * *', async () => {
-    // ここで特定の処理を実行
+    // 毎時間実行
     console.log('MMRLIST毎時更新')
     const channel = client.channels.cache.get(process.env.CHANNEL_MMRLIST || '');
     if (!!channel && channel.isTextBased()) {
@@ -262,6 +250,10 @@ client.on("interactionCreate", async (interaction) => {
 client.on('messageCreate', async (message: Message) => {
 
   console.log('message',message.guildId)
+
+  if(message.author.id === '1102572493367148554'){
+    sendTodaySQInfo(client);
+  }
 
   if (message.author.bot) return
   // !ml のみの場合は全体のMMRリストを表示

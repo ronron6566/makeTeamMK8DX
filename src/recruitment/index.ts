@@ -12,7 +12,7 @@ export const handleRecruitmentInteraction = async (interaction: ButtonInteractio
     embed.setDescription(` <@${user.id}>\r\n`);
     const channel = client.channels.cache.get(process.env.CHANNEL_TEST || '');
     if (!!channel && channel.isTextBased()) {
-        await channel.send(`${nickName}が募集を開始しました。`);
+        await channel.send(`${nickName}さんが募集を開始しました。`);
         const sentMessage = await channel.send({ embeds: [embed] });
         // console.log('sentMessage',sentMessage)
         const targetMessage = await channel.messages.fetch(sentMessage.id);
