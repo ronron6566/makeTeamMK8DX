@@ -100,8 +100,8 @@ client.on("interactionCreate", async (interaction) => {
         console.log('can')
         console.log(interaction)
         await interaction.update({ content: '参加しました', components: [] });
-      } else if (interaction.customId === 'think') {
-        await interaction.update({ content: '微妙ですね', components: [] });
+      // } else if (interaction.customId === 'think') {
+      //   await interaction.update({ content: '微妙ですね', components: [] });
       } else if (interaction.customId.startsWith('drop-')) {
         await interaction.update({ content: '辞退しました', components: [] });
       } else if (interaction.customId === 'recruitment') {

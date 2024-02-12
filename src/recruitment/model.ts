@@ -5,11 +5,11 @@ export const recruitment = new ButtonBuilder()
 	.setLabel('募集')
 	.setStyle(ButtonStyle.Primary);
 
-export const think = new ButtonBuilder()
-	.setCustomId('think')
-	.setLabel('微妙')
-	.setStyle(ButtonStyle.Secondary)
-	.setEmoji('🤔');
+// export const think = new ButtonBuilder()
+// 	.setCustomId('think')
+// 	.setLabel('微妙')
+// 	.setStyle(ButtonStyle.Secondary)
+// 	.setEmoji('🤔');
 
 export const buildCanButton = (eventMessageId: string): ButtonBuilder => {
 	const can = new ButtonBuilder()
