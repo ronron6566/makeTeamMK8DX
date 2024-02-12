@@ -1,5 +1,5 @@
 //必要なパッケージをインポートする
-import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable, ButtonBuilder, ButtonStyle, ActionRowBuilder, 
+import { GatewayIntentBits, Client, Partials, Message, ApplicationCommandDataResolvable, ButtonBuilder, ActionRowBuilder,
 } from 'discord.js'
 import dotenv from 'dotenv'
 import { makeTeamHandler, mmrListHandler } from './mmrList';
@@ -13,8 +13,9 @@ import cron from 'node-cron';
 import dayjs from 'dayjs';
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import { can, drop, think } from './recruitment/model';
+import {  recruitment,} from './recruitment/model';
 import { getTodayLines, convertTodayLinesToJst } from './mogiEvents/getTodayLines';
+import { handleRecruitmentInteraction } from './recruitment';
 // import { add } from 'cheerio/lib/api/traversing';
 
 dayjs.extend(timezone);
@@ -112,12 +113,37 @@ client.on("interactionCreate", async (interaction) => {
 
   if (!interaction.isCommand()) {
     if (interaction.isButton()) {
-      if (interaction.customId === 'can') {
+      if (interaction.customId.startsWith('can-')) {
+        console.log('can')
+        console.log(interaction)
         await interaction.update({ content: '参加しました', components: [] });
       } else if (interaction.customId === 'think') {
         await interaction.update({ content: '微妙ですね', components: [] });
-      } else if (interaction.customId === 'drop') {
+      } else if (interaction.customId.startsWith('drop-')) {
         await interaction.update({ content: '辞退しました', components: [] });
+      } else if (interaction.customId === 'recruitment') {
+        await handleRecruitmentInteraction(client);
+        // // await interaction.update({ content: '募集中です', components: [can,] });
+        // const embed = new EmbedBuilder().setTitle('#2084 2v2: 02月12日 23時');
+        // embed.setDescription('minchaso \r\n aaa \r\n bbb \r\n ');
+        // const channel = client.channels.cache.get(process.env.CHANNEL_TEST || '');
+        // if (!!channel && channel.isTextBased()) {
+        //   // channel.send({ embeds: [embed] });
+        //   const sentMessage = await channel.send({ embeds: [embed] });
+        //   console.log('sentMessage',sentMessage)
+        //   const targetMessage = await channel.messages.fetch(sentMessage.id);
+        //   console.log('targetMessage',targetMessage.embeds[0].description)
+        //   if(!targetMessage.embeds[0].title) return;
+        //   console.log('targetMessage',getMogiFormat(targetMessage.embeds[0].title))
+        //   channel.send({
+        //     // content: `#2084 2v2: 02月12日 23時`,
+        //     components: [new ActionRowBuilder<ButtonBuilder>({
+        //         components: [
+        //           buildCanButton(sentMessage.id), think, buildDropButton(sentMessage.id),
+        //         ]
+        //     })]
+        //   });
+        // } 
       }
     }
 
@@ -219,7 +245,7 @@ client.on("interactionCreate", async (interaction) => {
       content: `ボタンを押してください`,
       components: [new ActionRowBuilder<ButtonBuilder>({
           components: [
-            can, think, drop
+            recruitment
           ]
       })]
    });
@@ -248,7 +274,7 @@ client.on('messageCreate', async (message: Message) => {
     await addInitialPlayerData(message.guildId || '');
   }else if (message.content === '!dldata') {
     await deleteAllData();
-  }else if (message.content === '!ul') {
+  // }else if (message.content === '!ul') {
   }
 
 
@@ -260,7 +286,7 @@ client.on('messageCreate', async (message: Message) => {
       channel.send('エラーが発生しました');
     }
   }
-      
+  
 
 
 //ボット作成時のトークンでDiscordと接続
