@@ -1,9 +1,9 @@
-import {  Client, ButtonBuilder, ActionRowBuilder, EmbedBuilder,  
+import { Interaction, Client, ButtonBuilder, ActionRowBuilder, EmbedBuilder,  
 } from 'discord.js'
 import { buildCanButton, buildDropButton, think } from './model';
 import { getMogiFormat } from './getMogiFormat';
 
-export async function handleRecruitmentInteraction(client: Client) {
+export const handleRecruitmentInteraction = async (interaction: Interaction, client: Client) => {
     const embed = new EmbedBuilder().setTitle('#2084 2v2: 02月12日 23時');
     embed.setDescription('minchaso \r\n aaa \r\n bbb \r\n ');
     const channel = client.channels.cache.get(process.env.CHANNEL_TEST || '');

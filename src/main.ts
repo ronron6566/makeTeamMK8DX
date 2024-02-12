@@ -8,7 +8,7 @@ import { discordToPlayerMap, loungeIds } from '../env/env';
 import { addCommandParams,  mlCommandParams,  } from './mmrList/model';
 import { addInitialPlayerData, addPlayerData, deleteAllData } from './dao/accessFirestore';
 import { pleaseWait } from './util/botReplies';
-import { getExecutor } from './interaction/getExecutor';
+import { getExecutorForFirebase } from './interaction/getExecutor';
 import cron from 'node-cron';
 import dayjs from 'dayjs';
 import timezone from "dayjs/plugin/timezone";
@@ -122,7 +122,7 @@ client.on("interactionCreate", async (interaction) => {
       } else if (interaction.customId.startsWith('drop-')) {
         await interaction.update({ content: '辞退しました', components: [] });
       } else if (interaction.customId === 'recruitment') {
-        await handleRecruitmentInteraction(client);
+        await handleRecruitmentInteraction(interaction,client);
         // // await interaction.update({ content: '募集中です', components: [can,] });
         // const embed = new EmbedBuilder().setTitle('#2084 2v2: 02月12日 23時');
         // embed.setDescription('minchaso \r\n aaa \r\n bbb \r\n ');
@@ -179,7 +179,7 @@ client.on("interactionCreate", async (interaction) => {
   }else if (interaction.commandName === 'add') {
     console.log('interaction:add')
     await interaction.editReply(pleaseWait);
-    const executor = getExecutor(client, interaction);
+    const executor = getExecutorForFirebase(client, interaction);
 
     const guildId = executor.discordGuild.id;
     const discordId = executor.discordUser.id;

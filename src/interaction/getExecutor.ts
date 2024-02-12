@@ -7,7 +7,7 @@ interface Executor {
     loungeId: string
 }
 
-export const getExecutor = (
+export const getExecutorForFirebase = (
     client:Client,
     interaction: CommandInteraction | MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction):Executor => {
         const guildId = interaction.guildId || '';
