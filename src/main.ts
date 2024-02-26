@@ -15,8 +15,9 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { recruitment } from './recruitment/model';
 import { handleRecruitmentInteraction } from './recruitment';
-import { sendTodaySQInfo } from './todaySqInfo';
+import { sendSQInfo, sendTodaySQInfo } from './todaySqInfo';
 import { updateMmrList } from './mmrList/updateMmrList';
+import { handleCanOrDropInteraction } from './recruitment/handleCanOrDropInteraction';
 // import { add } from 'cheerio/lib/api/traversing';
 
 dayjs.extend(timezone);
@@ -97,13 +98,20 @@ client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) {
     if (interaction.isButton()) {
       if (interaction.customId.startsWith('can-')) {
+        try{
         console.log('can')
-        console.log(interaction)
-        await interaction.update({ content: '参加しました', components: [] });
+        const messageId = interaction.customId.split('-')[1];
+        await handleCanOrDropInteraction(interaction,client,messageId,true);
+        }catch(error){
+          console.log(error);
+          sendError();
+        }
       // } else if (interaction.customId === 'think') {
       //   await interaction.update({ content: '微妙ですね', components: [] });
       } else if (interaction.customId.startsWith('drop-')) {
-        await interaction.update({ content: '辞退しました', components: [] });
+        console.log('drop')
+        const messageId = interaction.customId.split('-')[1];
+        await handleCanOrDropInteraction(interaction,client,messageId,false);
       } else if (interaction.customId === 'recruitment') {
         await handleRecruitmentInteraction(interaction,client);
         // // await interaction.update({ content: '募集中です', components: [can,] });
@@ -248,6 +256,7 @@ client.on('messageCreate', async (message: Message) => {
 
   if(message.author.id === '1102572493367148554'){
     sendTodaySQInfo(client);
+    sendSQInfo(client);
   }
 
   if (message.author.bot) return
@@ -261,7 +270,10 @@ client.on('messageCreate', async (message: Message) => {
     await addInitialPlayerData(message.guildId || '');
   }else if (message.content === '!dldata') {
     await deleteAllData();
-  // }else if (message.content === '!ul') {
+  }else if (message.content === '!tsq') {
+    await sendTodaySQInfo(client);
+  }else if (message.content === '!sq') {
+    await sendSQInfo(client);
   }
 
 
