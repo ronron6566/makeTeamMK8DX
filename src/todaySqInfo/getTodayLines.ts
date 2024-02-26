@@ -5,8 +5,11 @@ export const getTodayLines = async (channelId: string) => {
   try {
     const channel = client.channels.cache.get(channelId);
     if (!!channel && channel.isTextBased()) {
-      const messages = await channel.messages.fetch({ limit: 1 });
-      const latestMessage = messages.first();
+
+      const messages = await channel.messages.fetch({ limit: 50 });
+      const userIdLoungeSqInfo = '1102572493367148554'
+      const userMessages = messages.filter((message) => message.author.id === userIdLoungeSqInfo);
+      const latestMessage = userMessages.first();
       if (!latestMessage) {
         console.error('No messages found');
         return;
