@@ -32,7 +32,10 @@ export const sendTodaySQInfo = async (client:Client) => {
     }
 };
 
-export const sendSQInfo = async (client:Client) => {
+export const 
+
+
+sendSQInfo = async (client:Client) => {
     console.log('今週のSQ投稿');
     const channel = client.channels.cache.get(process.env.CHANNEL_SQ_INFO || '');
     if (!!channel && channel.isTextBased()) {
@@ -68,4 +71,4 @@ export const sendSQInfo = async (client:Client) => {
         }
     }
 }
-}; // Add the closing curly brace here
+}; 

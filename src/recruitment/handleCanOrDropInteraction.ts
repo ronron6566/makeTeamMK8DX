@@ -12,13 +12,6 @@ export const handleCanOrDropInteraction = async (interaction: ButtonInteraction,
     const authorId = user.id;
     const channel = client.channels.cache.get(process.env.CHANNEL_SQ_BOSHU || '');
     if (!!channel && channel.isTextBased()) {
-        // const buildDescription = (description: string, canParticipate: boolean) => {
-        //     if(canParticipate){
-        //         return `${description}\r\n <@${user.id}>`;
-        //     }else{
-        //         return description.replace(`\r\n <@${user.id}>`,'');
-        //     }
-        // }
 
         const targetMessage = await channel.messages.fetch(messageId);
         console.log('targetMessage',targetMessage)
@@ -63,8 +56,6 @@ export const handleCanOrDropInteraction = async (interaction: ButtonInteraction,
 
     } 
 
-
-    // 関数の中身を記述してください
 };
 
 const buildDescription = (description: string, userId:string, canParticipate: boolean) => {

@@ -20,11 +20,8 @@ export const handleRecruitmentInteraction = async (interaction: ButtonInteractio
         const roleMention = `<@&${roleId}>`; // ロールのメンション形式を作成
         await channel.send(`↓↓↓ ${roleMention} ** @${recruitNumber-1}** <@${user.id}>さんがSQ募集を開始しました。↓↓↓`);
         const sentMessage = await channel.send({ embeds: [embed] });
-        // console.log('sentMessage',sentMessage)
         const targetMessage = await channel.messages.fetch(sentMessage.id);
-        // console.log('targetMessage',targetMessage.embeds[0].description)
         if(!targetMessage.embeds[0].title) return;
-        // console.log('targetMessage',getMogiFormat(targetMessage.embeds[0].title))
         channel.send({
             components: [new ActionRowBuilder<ButtonBuilder>({
                 components: [

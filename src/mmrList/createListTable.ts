@@ -7,8 +7,6 @@ export const createEmbedMmrList = async (loungeIds:string[]) :Promise<EmbedBuild
 
     const mmrList = await getMmrList(loungeIds);
     const tables = await addMmrListToTable(mmrList);
-    // console.log(tables[0]);
-    // console.log(tables[1]);
     const embed = new EmbedBuilder().setFields(tables.toField());
     embed.setColor('Random')
     embed.setFooter({ text: getTimeStamp()})
@@ -57,8 +55,6 @@ export const createEmbedUrlList = async (loungeIds:string[]) :Promise<EmbedBuild
 
     const mmrList = await getMmrList(loungeIds);
     const tables = await addMmrListToTable(mmrList);
-    // console.log(tables[0]);
-    // console.log(tables[1]);
     const embed = new EmbedBuilder().setFields(tables.toField());
     embed.setColor('Random')
     embed.setFooter({ text: getTimeStamp()})
