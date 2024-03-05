@@ -20,7 +20,11 @@ const addMmrListToTable = async (mmrList:PlayerData[]) :Promise<Table>=> {
     const sortedMmrList = sortMmrList(mmrList);
     console.log(sortedMmrList);
     for (const playerData of sortedMmrList) {
-          table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed,playerData.eventPlayed]);
+        // if(playerData.name === 'minchaso'){
+        //     table.addRow(['もうすぐ30', playerData.mmr, playerData.lastPlayed,playerData.eventPlayed]);
+        // }else{
+            table.addRow([playerData.name, playerData.mmr, playerData.lastPlayed,playerData.eventPlayed]);
+        // }
     }
     const averageMmr = getAverageMmr(sortedMmrList);
     table.addRow(['--------------', '--------', '-------', '--']);

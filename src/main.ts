@@ -18,6 +18,7 @@ import { handleRecruitmentInteraction } from './recruitment';
 import { sendSQInfo, sendTodaySQInfo } from './todaySqInfo';
 import { updateMmrList } from './mmrList/updateMmrList';
 import { handleCanOrDropInteraction } from './recruitment/handleCanOrDropInteraction';
+import { handlePlzInteraction } from './recruitment/handlePlzInteraction';
 // import { add } from 'cheerio/lib/api/traversing';
 
 dayjs.extend(timezone);
@@ -114,27 +115,10 @@ client.on("interactionCreate", async (interaction) => {
         await handleCanOrDropInteraction(interaction,client,messageId,false);
       } else if (interaction.customId === 'recruitment') {
         await handleRecruitmentInteraction(interaction,client);
-        // // await interaction.update({ content: '募集中です', components: [can,] });
-        // const embed = new EmbedBuilder().setTitle('#2084 2v2: 02月12日 23時');
-        // embed.setDescription('minchaso \r\n aaa \r\n bbb \r\n ');
-        // const channel = client.channels.cache.get(process.env.CHANNEL_TEST || '');
-        // if (!!channel && channel.isTextBased()) {
-        //   // channel.send({ embeds: [embed] });
-        //   const sentMessage = await channel.send({ embeds: [embed] });
-        //   console.log('sentMessage',sentMessage)
-        //   const targetMessage = await channel.messages.fetch(sentMessage.id);
-        //   console.log('targetMessage',targetMessage.embeds[0].description)
-        //   if(!targetMessage.embeds[0].title) return;
-        //   console.log('targetMessage',getMogiFormat(targetMessage.embeds[0].title))
-        //   channel.send({
-        //     // content: `#2084 2v2: 02月12日 23時`,
-        //     components: [new ActionRowBuilder<ButtonBuilder>({
-        //         components: [
-        //           buildCanButton(sentMessage.id), think, buildDropButton(sentMessage.id),
-        //         ]
-        //     })]
-        //   });
-        // } 
+      } else if (interaction.customId.startsWith('plz-')) {
+        console.log('plz')
+        const messageId = interaction.customId.split('-')[1];
+        await handlePlzInteraction(interaction,client,messageId);
       }
     }
 

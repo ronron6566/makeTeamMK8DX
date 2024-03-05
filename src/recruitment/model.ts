@@ -28,3 +28,11 @@ export const buildDropButton = (eventMessageId: string): ButtonBuilder => {
 		.setEmoji('❌');
 	return drop;
 };
+
+export const buildPlzButton = (eventMessageId: string): ButtonBuilder => {
+	const plz = new ButtonBuilder()
+		.setCustomId(`plz-${eventMessageId}`)
+		.setLabel('挙手してやテスト')
+		.setStyle(ButtonStyle.Primary)
+	return plz;
+};

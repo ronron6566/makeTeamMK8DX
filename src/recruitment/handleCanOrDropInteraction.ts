@@ -1,8 +1,9 @@
-import { ButtonInteraction, Client, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, Client, EmbedBuilder } from "discord.js";
 import { getExecutorFromButtonInteraction } from "../interaction/getExecutor";
 import { getMogiFormat } from "./getMogiFormat";
 import { discordToPlayerMap } from "../../env/env";
 import { createEmbedMmrList } from "../mmrList/createListTable";
+import { buildPlzButton } from "./model";
 
 
 export const handleCanOrDropInteraction = async (interaction: ButtonInteraction, client: Client, messageId:string, canParticipate: boolean) => {
@@ -49,6 +50,14 @@ export const handleCanOrDropInteraction = async (interaction: ButtonInteraction,
                 console.log('targetLoungeIds',targetLoungeIds)
                 const embedMmrList = await createEmbedMmrList(targetLoungeIds);
                 await interaction.channel?.send({ embeds: [embedMmrList] });
+
+                interaction.channel?.send({
+                    components: [new ActionRowBuilder<ButtonBuilder>({
+                        components: [
+                            buildPlzButton(messageId),
+                        ]
+                    })]
+                });
 
             }
         }
